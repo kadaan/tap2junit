@@ -1,1 +1,4 @@
 tap2junit
+dist/
+vendor/
+.idea/

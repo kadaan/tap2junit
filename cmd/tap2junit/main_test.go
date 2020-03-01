@@ -8,6 +8,11 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+var _ = func() bool {
+	testing.Init()
+	return true
+}()
+
 func TestCli(t *testing.T) {
 	tests := []struct {
 		name        string
