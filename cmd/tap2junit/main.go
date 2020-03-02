@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 
 	"github.com/filmil/tap2junit/pkg/junit"
@@ -16,13 +17,23 @@ import (
 
 var (
 	testName        = flag.String("test_name", "unnamed_test", "Sets the test name to use")
+	outputFile      = flag.String("output_file", "", "Sets the output file to use")
 	reorderDuration = flag.Bool("reorder_duration", false, "If set, will reorder durations to work around https://github.com/bats-core/bats-core/issues/187")
 	reorderAll      = flag.Bool("reorder_all", false, "If set, will reorder all test lines to work around https://github.com/bats-core/bats-core/issues/187")
 	singleSuite     = flag.Bool("single_suite", false, "If set, will output only the <testsuite> as top-level tag; not <testsuites>")
 )
 
 func run(r io.Reader, w io.Writer, opts tap.ReadOpt, singleSuite bool) error {
-	t, err := tap.Read(r, opts)
+	s := ioutil.Discard
+	if *outputFile != "" {
+		s = w
+		nw, err := os.Create(*outputFile)
+		if err != nil {
+			panic(err)
+		}
+		w = nw
+	}
+	t, err := tap.Read(r, s, opts)
 	if err != nil {
 		return fmt.Errorf("while reading TAP: %v", err)
 	}

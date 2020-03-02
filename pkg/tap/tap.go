@@ -124,7 +124,7 @@ type ReadOpt struct {
 // reorder is set, the Duration line will be added to the next test instead of
 // the current, to work around issue
 // https://github.com/bats-core/bats-core/issues/187
-func Read(i io.Reader, opt ReadOpt) (Case, error) {
+func Read(i io.Reader, w io.Writer, opt ReadOpt) (Case, error) {
 	var (
 		r  Case = Case{Version: 12, Name: opt.Name}
 		ps parser
@@ -133,6 +133,7 @@ func Read(i io.Reader, opt ReadOpt) (Case, error) {
 	for s.Scan() {
 		t := s.Text()
 		r.Raw = fmt.Sprintf("%s%s\n", r.Raw, t)
+		fmt.Fprintf(w, r.Raw)
 
 		glog.V(2).Infof("Text: %q", t)
 

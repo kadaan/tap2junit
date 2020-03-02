@@ -3,6 +3,7 @@ package tap
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"runtime/debug"
 	"strings"
 	"testing"
@@ -327,7 +328,7 @@ not ok 1 Hello
 				ReorderDuration: test.reorder,
 				ReorderAll:      test.reorderAll,
 			}
-			actual, err := Read(r, opt)
+			actual, err := Read(r, ioutil.Discard, opt)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
