@@ -133,7 +133,7 @@ func Read(i io.Reader, w io.Writer, opt ReadOpt) (Case, error) {
 	for s.Scan() {
 		t := s.Text()
 		r.Raw = fmt.Sprintf("%s%s\n", r.Raw, t)
-		fmt.Fprintf(w, r.Raw)
+		fmt.Fprintf(w, "%s\n", t)
 
 		glog.V(2).Infof("Text: %q", t)
 
