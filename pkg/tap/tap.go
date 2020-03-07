@@ -236,13 +236,21 @@ func Read(i io.Reader, w io.Writer, opt ReadOpt) (Case, error) {
 				if err != nil {
 					glog.Warningf("could not parse duration: %v", line)
 				}
-				r.Results[ps.lt+fixup-1].Duration = d
+				fixUpIndex := ps.lt+fixup-1
+				if fixUpIndex >= len(r.Results) {
+					fixUpIndex = len(r.Results) - 1
+				}
+				r.Results[fixUpIndex].Duration = d
 			}
 			glog.V(5).Infof(
 				"ps=%+v\n len(r.Results)=%v, r.Results=%+v\nfixup: %v\nv=%+v\nlt=%v\n\n",
 				ps, len(r.Results), r.Results, fixup, v, ps.lt,
 			)
-			r.Results[ps.lt+fixup-1].Raw = joinNonempty(r.Results[ps.lt+fixup-1].Raw, v[0])
+			fixUpIndex := ps.lt+fixup-1
+			if fixUpIndex >= len(r.Results) {
+				fixUpIndex = len(r.Results) - 1
+			}
+			r.Results[fixUpIndex].Raw = joinNonempty(r.Results[fixUpIndex].Raw, v[0])
 			glog.Infof("results: %+v", r.Results)
 			continue
 		}

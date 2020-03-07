@@ -243,6 +243,7 @@ ok Unnumbered test
 # This should be reordered
 # And this too
 ok 1 Hello
+# And this as well
 `,
 			expected: Case{
 				Version: 12,
@@ -251,7 +252,7 @@ ok 1 Hello
 				Results: []Result{
 					{
 						Status: PASSED,
-						Raw:    "# This should be reordered\n# And this too\n 1 Hello",
+						Raw:    "# This should be reordered\n# And this too\n 1 Hello\n# And this as well",
 						Header: "Hello",
 					},
 				},
